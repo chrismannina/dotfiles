@@ -36,4 +36,8 @@ if [ -d "./nvim" ]; then
 fi
 
 echo "Dotfiles installed successfully!"
+echo ""
+echo "Optional: Install Homebrew packages with:"
+echo "  cd homebrew && brew bundle install"
+echo ""
 echo "Restart your terminal or run 'source ~/.zshrc' to apply changes"

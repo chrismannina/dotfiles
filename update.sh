@@ -57,7 +57,7 @@ fi
 
 # Update Brewfile
 echo "Updating Brewfile..."
-brew bundle dump --file=Brewfile --force
+brew bundle dump --file=homebrew/Brewfile --force
 
 echo "Update complete!"
 echo "Review changes with: git diff"
