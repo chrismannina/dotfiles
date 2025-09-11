@@ -1,0 +1,25 @@
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+
+# Initialize pyenv
+eval "$(pyenv init -)"
+
+# Alias 'python' to 'python3'
+alias python='python3'
+eval "$(starship init zsh)"
+
+# Set Neovim as the default editor
+export VISUAL=nvim
+export EDITOR="$VISUAL"
+clear && fastfetch
+export XDG_CONFIG_HOME="$HOME/.config"
+
+# Navigate to ~/Developer or specific project within it
+dev() {
+    if [ $# -eq 0 ]; then
+        cd ~/Developer
+    else
+        cd ~/Developer/"$1"
+    fi
+}
