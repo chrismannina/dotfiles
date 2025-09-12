@@ -43,21 +43,21 @@ update_directory() {
 }
 
 # Update individual files
-update_file "$HOME/.zshrc" "shell/zshrc"
-update_file "$HOME/.gitconfig" "git/gitconfig"
-update_file "$HOME/.config/starship.toml" "starship/starship.toml"
-update_file "$HOME/.config/gh/config.yml" "gh/config.yml"
-update_file "$HOME/.config/gh/hosts.yml" "gh/hosts.yml"
-update_file "$HOME/.config/ghostty/config" "ghostty/config"
+update_file "$HOME/.zshrc" "$HOME/Developer/dotfiles/shell/zshrc"
+update_file "$HOME/.gitconfig" "$HOME/Developer/dotfiles/git/gitconfig"
+update_file "$HOME/.config/starship.toml" "$HOME/Developer/dotfiles/starship/starship.toml"
+update_file "$HOME/.config/gh/config.yml" "$HOME/Developer/dotfiles/gh/config.yml"
+update_file "$HOME/.config/gh/hosts.yml" "$HOME/Developer/dotfiles/gh/hosts.yml"
+update_file "$HOME/.config/ghostty/config" "$HOME/Developer/dotfiles/ghostty/config"
 
 # Update directories
 if [ -d "$HOME/.config/nvim" ]; then
-    update_directory "$HOME/.config/nvim" "nvim"
+    update_directory "$HOME/.config/nvim" "$HOME/Developer/dotfiles/nvim"
 fi
 
 # Update Brewfile
 echo "Updating Brewfile..."
-brew bundle dump --file=homebrew/Brewfile --force
+brew bundle dump --file=$HOME/Developer/dotfiles/homebrew/Brewfile --force
 
 echo "Update complete!"
 echo "Review changes with: git diff"
