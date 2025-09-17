@@ -28,3 +28,10 @@ alias ls='eza'
 alias ll='eza -l'
 alias la='eza -la'
 alias tree='eza --tree'
+
+# Quick shortcuts
+alias g='git'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias grep='rg'
+alias c='clear'
