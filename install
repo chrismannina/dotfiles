@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+# Dotfiles installer — safe to re-run.
+#
+#   ./install work        # shared config + work apps
+#   ./install personal    # shared config + personal apps
+#   ./install             # reuse the profile from the last run
+#   ./install --no-brew   # links only, skip Homebrew
+#
+# Links every config into place (backing up anything it replaces), creates
+# untracked ~/.zshrc.local and ~/.gitconfig.local on first run, then installs
+# the Brewfiles for the chosen profile.
+
+set -euo pipefail
+
+DOTFILES="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+PROFILE_FILE="$HOME/.dotfiles-profile"
+BACKUP_DIR="$HOME/.dotfiles_backup/$(date +%Y%m%d-%H%M%S)"
+
+profile=""
+run_brew=true
+for arg in "$@"; do
+  case "$arg" in
+    work|personal) profile="$arg" ;;
+    --no-brew) run_brew=false ;;
+    -h|--help) sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    *) echo "Unknown argument: $arg (expected work, personal, or --no-brew)" >&2; exit 1 ;;
+  esac
+done
+if [[ -z "$profile" && -f "$PROFILE_FILE" ]]; then
+  profile="$(cat "$PROFILE_FILE")"
+fi
+if [[ "$profile" != "work" && "$profile" != "personal" ]]; then
+  echo "Choose a profile: ./install work   or   ./install personal" >&2
+  exit 1
+fi
+echo "$profile" > "$PROFILE_FILE"
+echo "Profile: $profile"
+
+# link <repo path> <target path>
+link() {
+  local src="$DOTFILES/$1" dst="$2"
+  mkdir -p "$(dirname "$dst")"
+  if [[ -L "$dst" && "$(readlink "$dst")" == "$src" ]]; then
+    echo "  ok      $dst"
+    return
+  fi
+  if [[ -e "$dst" || -L "$dst" ]]; then
+    mkdir -p "$BACKUP_DIR"
+    mv "$dst" "$BACKUP_DIR/"
+    echo "  backup  $dst -> $BACKUP_DIR/"
+  fi
+  ln -s "$src" "$dst"
+  echo "  linked  $dst"
+}
+
+echo "Linking configs:"
+link zsh/zshrc                 "$HOME/.zshrc"
+link zsh/zprofile              "$HOME/.zprofile"
+link git/gitconfig             "$HOME/.gitconfig"
+link git/ignore                "$HOME/.config/git/ignore"
+link starship/starship.toml    "$HOME/.config/starship.toml"
+link ghostty/config            "$HOME/.config/ghostty/config"
+link fastfetch/config.jsonc    "$HOME/.config/fastfetch/config.jsonc"
+
+# Ghostty also reads this macOS-specific file and it overrides ~/.config/ghostty,
+# so move it aside if it has anything in it.
+mac_ghostty="$HOME/Library/Application Support/com.mitchellh.ghostty/config.ghostty"
+if [[ -s "$mac_ghostty" ]]; then
+  mkdir -p "$BACKUP_DIR"
+  mv "$mac_ghostty" "$BACKUP_DIR/"
+  echo "  backup  $mac_ghostty -> $BACKUP_DIR/ (superseded by ~/.config/ghostty/config)"
+fi
+
+# Untracked, machine-specific files — created once, never overwritten.
+if [[ ! -f "$HOME/.gitconfig.local" ]]; then
+  cat > "$HOME/.gitconfig.local" <<'EOF'
+# Machine-specific git settings (not tracked in dotfiles)
+[user]
+	name = Your Name
+	email = you@example.com
+EOF
+  echo "  created ~/.gitconfig.local  <- set your name and email here"
+fi
+if [[ ! -f "$HOME/.zshrc.local" ]]; then
+  cat > "$HOME/.zshrc.local" <<'EOF'
+# Machine-specific shell settings (not tracked in dotfiles)
+# Aliases, paths, and anything work- or machine-specific go here.
+EOF
+  echo "  created ~/.zshrc.local"
+fi
+
+if $run_brew; then
+  if ! command -v brew >/dev/null 2>&1; then
+    echo "Homebrew not found — install it from https://brew.sh, then re-run." >&2
+    exit 1
+  fi
+  echo "Installing Homebrew packages (shared + $profile)..."
+  brew bundle --file="$DOTFILES/brew/Brewfile"
+  brew bundle --file="$DOTFILES/brew/Brewfile.$profile"
+fi
+
+echo
+echo "Done. Open a new terminal window to load everything."

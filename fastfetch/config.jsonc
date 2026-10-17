@@ -1,0 +1,25 @@
+// fastfetch — runs when a new Ghostty window/tab opens (see ~/.zshrc)
+// Full module list: fastfetch --list-modules
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": { "padding": { "top": 1, "right": 3 } },
+  "display": { "separator": "  " },
+  "modules": [
+    "break",
+    "title",
+    "separator",
+    "os",
+    "host",
+    "cpu",
+    "gpu",
+    "memory",
+    "disk",
+    "battery",
+    "uptime",
+    "packages",
+    "shell",
+    "terminal",
+    "break",
+    "colors"
+  ]
+}

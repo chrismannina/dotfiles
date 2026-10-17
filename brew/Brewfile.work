@@ -1,0 +1,8 @@
+# Work machine extras
+brew "glab"
+brew "herdr"
+cask "codex"
+cask "datagrip"
+cask "notion"
+cask "handy"
+cask "meetily"

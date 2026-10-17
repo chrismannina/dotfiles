@@ -1,0 +1,32 @@
+# Shared on every machine — install: ./install <work|personal>
+
+# Shell & prompt
+brew "starship"
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+brew "fastfetch"
+
+# CLI essentials
+brew "git"
+brew "gh"
+brew "lazygit"
+brew "fzf"
+brew "ripgrep"
+brew "zoxide"
+brew "eza"
+brew "bat"
+brew "jq"
+brew "direnv"
+brew "just"
+brew "tmux"
+
+# Python (uv manages Python versions and venvs — no pyenv needed)
+brew "uv"
+
+# Apps
+cask "ghostty"
+cask "claude-code"
+cask "visual-studio-code"
+cask "zed"
+cask "obsidian"
+cask "bitwarden"
