@@ -1,0 +1,48 @@
+# ~/.zshrc — shared across machines (managed in ~/.dotfiles)
+# Machine-specific settings go in ~/.zshrc.local (not tracked).
+
+# --- History ---
+HISTFILE=~/.zsh_history
+HISTSIZE=50000
+SAVEHIST=50000
+setopt SHARE_HISTORY HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIST_REDUCE_BLANKS
+
+# --- Completion ---
+autoload -Uz compinit && compinit
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'   # case-insensitive
+setopt AUTO_CD                                           # type a folder name to cd into it
+
+# --- Environment ---
+export XDG_CONFIG_HOME="$HOME/.config"
+export PATH="$HOME/.local/bin:$PATH"   # uv tool installs
+export EDITOR="code --wait"
+export VISUAL="$EDITOR"
+
+# --- Tools ---
+eval "$(direnv hook zsh)"          # auto-load per-project .envrc
+eval "$(zoxide init zsh)"          # z <partial-name> jumps to frequent folders
+source <(fzf --zsh)                # Ctrl+R history search, Ctrl+T file search
+
+# --- Aliases ---
+alias ls='eza --group-directories-first'
+alias ll='eza -l --git --group-directories-first'
+alias la='eza -la --git --group-directories-first'
+alias tree='eza --tree --git-ignore'
+alias g='git'
+alias lg='lazygit'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias dots='cd ~/.dotfiles'
+
+# --- Machine-specific overrides ---
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# --- Greeting: only in a fresh Ghostty window (not Claude Code, VS Code, scripts) ---
+if [[ -o interactive && "$TERM_PROGRAM" == "ghostty" && -z "$CLAUDECODE" ]]; then
+  fastfetch
+fi
+
+# --- Prompt + plugins (keep syntax highlighting last) ---
+eval "$(starship init zsh)"
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

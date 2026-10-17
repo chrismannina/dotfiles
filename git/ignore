@@ -1,0 +1,10 @@
+# Global gitignore (core.excludesFile)
+.DS_Store
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.direnv/
+*.log
