@@ -2,7 +2,7 @@
 # Browse themes: ghostty +list-themes   ·   All options: ghostty +show-config --default --docs
 
 # Look
-theme = light:Catppuccin Latte,dark:Catppuccin Mocha
+theme = light:Rose Pine Dawn,dark:Rose Pine
 font-size = 14
 window-padding-x = 12
 window-padding-y = 8

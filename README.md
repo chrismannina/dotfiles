@@ -1,7 +1,7 @@
 # dotfiles
 
 macOS terminal setup shared between my work and personal Macs:
-Ghostty + Catppuccin, Starship prompt, zsh, git, and Homebrew apps.
+Ghostty + Rose Pine, Starship prompt, zsh, git, and Homebrew apps.
 
 ## Install
 
